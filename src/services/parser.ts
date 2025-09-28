@@ -1,9 +1,6 @@
 import mammoth from "mammoth"
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs"
 
-// Worker tidak diperlukan di Node
-pdfjsLib.GlobalWorkerOptions.workerSrc = ""
-
 export async function parseFile(file: Express.Multer.File): Promise<string> {
   if (file.mimetype === "application/pdf") {
     return await parsePdf(file.buffer)
@@ -19,7 +16,9 @@ export async function parseFile(file: Express.Multer.File): Promise<string> {
 
 async function parsePdf(buffer: Buffer): Promise<string> {
   const data = new Uint8Array(buffer)
-  const loadingTask = pdfjsLib.getDocument({ data })
+
+  // 🚀 ini penting: matikan fetch/worker
+  const loadingTask = pdfjsLib.getDocument({ data, useWorkerFetch: false })
   const pdf = await loadingTask.promise
 
   let text = ""

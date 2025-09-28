@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get("/result/:id", (req: Request, res: Response) => {
   const task: Task | undefined = getTask(req.params.id)
+  console.log("[Task Result]", task)
   res.json(task || { error: "Not found" })
 })
 
