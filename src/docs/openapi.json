@@ -1,0 +1,86 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "AI CV Evaluator API",
+        "version": "1.0.0",
+        "description": "Backend service for evaluating candidate CVs and projects using DeepSeek."
+    },
+    "paths": {
+        "/upload": {
+            "post": {
+                "summary": "Upload CV or Project Report",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Upload success"
+                    }
+                }
+            }
+        },
+        "/evaluate": {
+            "post": {
+                "summary": "Start evaluation job",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "cvText": {
+                                        "type": "string"
+                                    },
+                                    "jobDescription": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "cvText",
+                                    "jobDescription"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Job queued"
+                    }
+                }
+            }
+        },
+        "/result/{id}": {
+            "get": {
+                "summary": "Get evaluation result",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Evaluation result"
+                    }
+                }
+            }
+        }
+    }
+}
